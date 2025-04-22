@@ -1,0 +1,48 @@
+name: Generate Tetris Contribution Graph
+
+on:
+  schedule:
+    - cron: "0 */12 * * *" # Run every 12 hours
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate tetris-contribution-graph
+        uses: custom/tetris-contribution-graph@main
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          # Custom configuration for Tetris animation
+          cell_size: 12 # Larger cells for visibility
+          grid_width: 10 # Standard Tetris width
+          grid_height: 20 # Standard Tetris height
+          theme: dracula # Match README theme
+          piece_colors: "#FF5555,#50FA7B,#F1FA8C,#BD93F9" # Dracula palette: red, green, yellow, purple
+          background_color_light: "#282A36" # Dracula background
+          background_color_dark: "#282A36" # Dracula background
+          border_color: "#44475A" # Dracula foreground
+          fall_speed: 0.5 # Slower fall speed (relative to default 1.0) for easier placement
+          shape_distribution: "square:0.4,line:0.3,L:0.15,T:0.1,other:0.05" # Favor simpler shapes
+          line_clear_threshold: 0.8 # Clear lines when 80% full for frequent clears
+          contribution_density: 0.6 # Moderate density to avoid overcrowding
+          animation_speed: 100 # 100ms per frame for smooth animation
+
+      - name: Push tetris-contribution-graph to output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+          commit_message: "Update Tetris contribution graph"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
