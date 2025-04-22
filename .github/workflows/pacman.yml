@@ -23,24 +23,30 @@ jobs:
         uses: abozanona/pacman-contribution-graph@main
         with:
           github_user_name: ${{ github.repository_owner }}
-          # Custom configuration for enhanced appearance
+          # Custom configuration for enhanced appearance and difficulty
           cell_size: 12 # Larger cells for better visibility
           grid_width: 53 # Standard year width
-          theme: dracula # Match your README theme
-          show_ghosts: true # Include ghosts for more dynamic animation
+          theme: dracula # Match README theme
+          show_ghosts: true # Include ghosts for dynamic animation
           pacman_color: "#FF0" # Yellow Pacman
           ghost_colors: "#F00,#0FF,#FF0,#F0F" # Red, Cyan, Yellow, Purple ghosts
           dot_color: "#FFF" # White dots
           background_color_light: "#282A36" # Dracula background for light mode
           background_color_dark: "#282A36" # Dracula background for dark mode
           border_color: "#44475A" # Dracula foreground
-          animation_speed: 100 # Slightly faster animation (ms per frame)
+          animation_speed: 80 # Faster animation for more dynamic feel (ms per frame)
+          pacman_speed: 1.2 # Increase Pacman speed (relative to default 1.0)
+          ghost_speed: 0.8 # Decrease ghost speed (relative to default 1.0)
+          dot_density: 0.7 # Slightly reduce dot density to make navigation easier
+          ghost_count: 3 # Reduce number of ghosts to lower difficulty
+          power_pellet_chance: 0.1 # 10% chance for power pellets to appear
+          power_pellet_duration: 5000 # 5 seconds of invincibility when power pellet is consumed
 
       - name: Push pacman-contribution-graph to output branch
         uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: output
           build_dir: dist
-          commit_message: "Update enhanced Pacman contribution graph"
+          commit_message: "Update enhanced Pacman contribution graph with improved difficulty"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
